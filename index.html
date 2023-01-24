@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Button</title>
+</head>
+
+<body>
+	<main class="wrapper">
+		<button id="the-button">grow</button>
+	</main>
+</body>
+
+<style>
+	/* the props */
+	@import "https://unpkg.com/open-props";
+
+	/* optional imports that use the props */
+	@import "https://unpkg.com/open-props/normalize.min.css";
+	@import "https://unpkg.com/open-props/buttons.min.css";
+
+	body {
+		display: grid;
+		place-items: center;
+		place-content: center;
+		overflow: hidden;
+	}
+
+	#the-button {
+		--button-width: 1;
+		--initial-size: 50;
+		width: calc(1px * var(--initial-size) * var(--button-width));
+		height: calc(1px * var(--initial-size) * var(--button-width));
+		font-size: calc(100% * var(--button-width));
+
+		transition: all 0.5s var(--ease-elastic-3);
+
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+
+		border-radius: 50%;
+	}
+</style>
+
+<script>
+	// @ts-check
+	"use strict";
+	const button = document.getElementById("the-button");
+	const originalText = button.textContent;
+
+	button.addEventListener("click", () => {
+		const initialSize = parseFloat(
+			getComputedStyle(button).getPropertyValue("--initial-size")
+		);
+		const buttonWidth = parseFloat(
+			getComputedStyle(button).getPropertyValue("--button-width")
+		);
+		const windowWidth = window.innerWidth;
+		const windowHeight = window.innerHeight;
+		if (
+			buttonWidth * initialSize > windowWidth &&
+			buttonWidth * initialSize > windowHeight
+		) {
+			button.style.setProperty("--button-width", 1);
+			button.textContent = originalText;
+			return;
+		}
+		const newWidth = buttonWidth * 1.6;
+		button.style.setProperty("--button-width", newWidth);
+
+		if (newWidth * initialSize > windowWidth && newWidth * initialSize > windowHeight) {
+			button.textContent = "😔";
+		}
+	});
+</script>
+
+</html>
